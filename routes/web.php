@@ -46,6 +46,26 @@ Route::prefix('student')->group(function(){
     Route::post('update','Admin\StudentController@update');
 });
 
+Route::prefix('login')->group(function(){
+    // 登录
+    Route::get('/','Admin\LoginController@login');
+    // 执行登录
+    Route::post('loginDo','Admin\LoginController@loginDo');
+    // 注册
+    Route::get('register','Admin\LoginController@register');
+    // 执行注册
+    Route::post('registerdo','Admin\LoginController@registerdo');
+    // 首页
+    Route::get('index','Admin\LoginController@index');
+    // 删除
+    Route::get('delete/{id}','Admin\LoginController@delete');
+    // 修改
+    Route::get('edit/{id}','Admin\LoginController@edit');
+    // 执行修改
+    Route::post('update/{id}','Admin\LoginController@update');
+});
+
+//  练习
 Route::get('/test','Admin\UserController@test');
 
 
