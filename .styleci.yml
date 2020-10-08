@@ -4,7 +4,7 @@ php:
     - unused_use
   finder:
     not-name:
-      - index.php
+      - login.php
       - server.php
 js:
   finder:

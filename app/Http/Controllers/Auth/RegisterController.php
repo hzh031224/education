@@ -57,7 +57,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Create a new login instance after a valid registration.
+     * Create a new index instance after a valid registration.
      *
      * @param  array  $data
      * @return \App\User

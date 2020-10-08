@@ -30,14 +30,14 @@ Route::get('/', function () {
 
 
 // 路由分组
-
+// 学生
 Route::prefix('student')->group(function(){
     // 添加
     Route::get('create','Admin\StudentController@create');
     // 执行添加
     Route::post('save','Admin\StudentController@save');
     // 列表
-    Route::get('index','Admin\StudentController@index');
+    Route::get('login','Admin\StudentController@login');
     // 删除
     Route::get('delete/{id}','Admin\StudentController@delete');
     // 修改
@@ -45,8 +45,8 @@ Route::prefix('student')->group(function(){
     // 执行修改
     Route::post('update','Admin\StudentController@update');
 });
-
-Route::prefix('login')->group(function(){
+// 登录
+Route::prefix('admin/login')->group(function(){
     // 登录
     Route::get('/','Admin\LoginController@login');
     // 执行登录
@@ -63,6 +63,18 @@ Route::prefix('login')->group(function(){
     Route::get('edit/{id}','Admin\LoginController@edit');
     // 执行修改
     Route::post('update/{id}','Admin\LoginController@update');
+});
+// 商品
+Route::prefix('admin/goods')->group(function(){
+    // 列表
+    Route::get('/','Admin\GoodsController@index');
+    // 详情页
+    Route::get('detail/{id}','Admin\GoodsController@detail');
+});
+// 后台首页
+Route::prefix('admin/index')->group(function(){
+    // 后台首页
+    Route::get('/','Admin\IndexController@index');
 });
 
 //  练习

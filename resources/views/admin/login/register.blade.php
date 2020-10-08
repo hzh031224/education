@@ -8,13 +8,17 @@
     <title>Document</title>
 </head>
 <body>
-    @if(!empty(session('msg')))
-        <div class="alert alert-msg" role="alert">
-            {{session('msg')}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
     @endif
     <table border="1">
-        <form action="{{url('login/registerdo')}}" method="post">
+        <form action="{{url('admin/login/registerdo')}}" method="post">
             @csrf
             <tr>
                 <td>用户名</td>
@@ -25,12 +29,16 @@
                 <td><input type="email" name="email" id=""></td>
             </tr>
             <tr>
+                <td>手机号</td>
+                <td><input type="tel" name="user_tel" id=""></td>
+            </tr>
+            <tr>
                 <td>密码</td>
                 <td><input type="password" name="password" id=""></td>
             </tr>
             <tr>
                 <td>重复密码</td>
-                <td><input type="password" name="rep_password" id=""></td>
+                <td><input type="password" name="password_confirmation" id=""></td>
             </tr>
             <tr>
                 <td><input type="submit" value="注册"></td>

@@ -13,12 +13,21 @@
         {{session('msg')}}
     </div>
 @endif
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <table border="1">
-        <form action="{{url('login/loginDo')}}" method="post">
+        <form action="{{url('admin/login/loginDo')}}" method="post">
             @csrf
             <tr>
                 <td>用户名</td>
-                <td><input type="text" name="user_name" id=""></td>
+                <td><input type="text" name="user_account" placeholder="用户名/Email/手机号" id=""></td>
             </tr>
             <tr>
                 <td>密码</td>

@@ -23,8 +23,8 @@
             <td>{{$v->email}}</td>
             <td>{{$v->reg_time}}</td>
             <td>
-                <a href="{{url('/login/delete/'.$v->uid)}}">删除</a>
-                <a href="{{url('/login/edit/'.$v->uid)}}">修改</a>
+                <a href="{{url('admin/login/delete/'.$v->uid)}}">删除</a>
+                <a href="{{url('admin/login/edit/'.$v->uid)}}">修改</a>
             </td>
         </tr>
         @endforeach

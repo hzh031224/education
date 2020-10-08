@@ -8,12 +8,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
-    | messages that we need to display to the login. You are free to modify
+    | messages that we need to display to the index. You are free to modify
     | these language lines according to your application's requirements.
     |
     */
 
     'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'throttle' => 'Too many index attempts. Please try again in :seconds seconds.',
 
 ];

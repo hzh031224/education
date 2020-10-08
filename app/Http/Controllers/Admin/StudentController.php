@@ -24,7 +24,7 @@ class StudentController extends Controller
         // $res = $StudentModel->all();
         // dump($res);
         if($res){
-            return redirect('student/index');
+            return redirect('student/login');
         }else{
             return redirect('student/create');
         }
@@ -34,7 +34,7 @@ class StudentController extends Controller
     public function index(){
         $StudentModel = new StudentModel();
         $StudentInfo = $StudentModel->all();
-        return view('admin.student.index',['StudentInfo'=>$StudentInfo]);
+        return view('admin.student.login',['StudentInfo'=>$StudentInfo]);
     }
 
     // 删除
@@ -42,7 +42,7 @@ class StudentController extends Controller
         $StudentModel = new StudentModel();
         $res = $StudentModel->where('stu_id',$id)->delete();
         if($res > 0){
-            return redirect('student/index');
+            return redirect('student/login');
         }else{
             return redirect('student/create');
         }
@@ -68,7 +68,7 @@ class StudentController extends Controller
         // $res = $StudentModel->all();
         // dump($res);
         if($res){
-            return redirect('student/index');
+            return redirect('student/login');
         }else{
             return redirect('student/create');
         }

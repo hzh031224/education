@@ -14,7 +14,7 @@
         </div>
     @endif
     <table border="1">
-        <form action="{{url('login/update/'.$UserInfo->uid)}}" method="post">
+        <form action="{{url('admin/login/update/'.$UserInfo->uid)}}" method="post">
             @csrf
             <tr>
                 <td>用户名</td>
