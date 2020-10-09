@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User as UserModel;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
+
 
 class LoginController extends Controller
 {
@@ -34,20 +36,28 @@ class LoginController extends Controller
         // 得到当前用户的真实ip
         $ip = $request->getClientIp();
         $data = $request->except('_token');
-        if(substr_count($data['user_account'],'@') > 0){
+        /*if(substr_count($data['user_account'],'@') > 0){
             $where = ['email'=>$data['user_account']];
         }else if(strlen($data['user_account']) == 11){
             $where = ['user_tel'=>$data['user_account']];
         }else{
             $where = ['user_name'=>$data['user_account']];
-        }
+        }*/
         // 使用hash加密密码
         $UserModel = new UserModel();
         // 根据用户输入的账号和密码在库中查询
-        $res = $UserModel->where($where)->first();
+        $res = $UserModel
+            ->where(['email'=>$data['user_account']])
+            ->orwhere(['user_tel'=>$data['user_account']])
+            ->orwhere(['user_name'=>$data['user_account']])
+            ->first();
         if(empty($res)){
             return redirect('admin/login')->with(['msg'=>'您输入的账号或密码有误']);
         }
+        if(is_object($res)){
+            $res = $res->toArray();
+        }
+
 //        $data['password'] = bcrypt($data['password']);
         /**
          * password_verify
@@ -59,7 +69,50 @@ class LoginController extends Controller
             $UserModel->where('uid',$res['uid'])->update($logininfo);
             return redirect('admin/login/index');
         }else{
-            return redirect('admin/login')->with(['msg'=>'您输入的账号或密码有误']);
+            /*10分钟内，用户连续输入密码错误超过5次，锁定用户 60分钟（禁止登录）。
+            提示：
+            使用Redis实现计数（incr）
+            使用expire实现时间控制
+            先得到最后一次错误的时间
+            判断当前时间戳
+            */
+            // 十分钟前
+            /*Redis::set('error_login'.$res['uid'],null);
+            Redis::set('right_login'.$res['uid'],null);
+            Redis::set('error_time'.$res['uid'],null);
+            dump(Redis::get('error_time'.$res['uid']));
+            dump(Redis::get('error_login'.$res['uid']));
+            dump(Redis::get('right_login'.$res['uid']));
+            die;*/
+            $ten_minute = 10 * 60;
+            if(time() > Redis::get('right_login'  .$res['uid'])){
+                /**
+                 * 如果他的错误时间大于当前时间 - 10 min
+                 */
+                if(Redis::get('error_time'.$res['uid']) > time() - $ten_minute){
+                    if(Redis::get('error_login'.$res['uid']) >= 10){
+                        $right_time = time() + 3600;
+                        Redis::set('right_login'.$res['uid'],$right_time);
+                        return redirect('admin/login')->with(['msg'=>'您输入的账号或密码有误，错误次数,已达到10次，锁定一小时']);
+                    }else{
+                        $ago_time = time() - 600;
+                        // 错误次数
+                        if(empty(Redis::get('error_login'.$res['uid']))){//如果它没有错误过那么错误次数从0开始
+                            $error_count = 1;
+                            Redis::set('error_login'.$res['uid'],$error_count);
+                            Redis::set('error_time'.$res['uid'],time());
+                        }else{//如果它错误过，那么从错误的基础上来+1
+                            $error_count = Redis::get('error_login'.$res['uid']);
+                            Redis::set('error_login'.$res['uid'],$error_count + 1);
+                        }
+                    }
+                }else{
+                    Redis::set('error_time'.$res['uid'],time());
+                }
+            }else{
+                return redirect('admin/login')->with(['msg'=>'您的密码已经输错10次，锁定一小时']);
+            }
+            return redirect('admin/login')->with(['msg'=>'您输入的账号或密码有误，错误次数'.Redis::get('error_login'.$res['uid']).'最近错误的时间'.Redis::get('error_time'.$res['uid'])]);
         }
     }
 

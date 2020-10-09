@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
     public function test(){
-        /* 
+        /*
         insert
         delete
         update
@@ -17,7 +18,7 @@ class UserController extends Controller
         自增 自减  increment  decrement
         聚合函数    sum  avg  min max count
         limit
-        order by 
+        order by
         */
         // 添加
         // $insert = Db::table('student')->insert(['stu_name'=>'张三','stu_age'=>13]);
@@ -46,5 +47,14 @@ class UserController extends Controller
         // order
         // $order = Db::table('student')->orderBy('stu_id','desc')->get();
         // dd($order);
+
+        /**
+         * 使用Redis
+         * 来设置 获取值
+         */
+        // 设置Redis 值
+        Redis::set('name', 'leesin');
+        // 获取Redis 值
+        echo Redis::get('name');
     }
 }

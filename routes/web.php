@@ -79,7 +79,10 @@ Route::prefix('admin/index')->group(function(){
 
 //  练习
 Route::get('/test','Admin\UserController@test');
-
+// info
+ Route::get('/info', function () {
+    phpinfo();
+});
 
 
 /**
